@@ -1,8 +1,17 @@
 
+import { db } from '../db';
+import { programsTable } from '../db/schema';
 import { type Program } from '../schema';
 
 export async function getPrograms(): Promise<Program[]> {
-    // This is a placeholder declaration! Real code should be implemented here.
-    // The goal of this handler is fetching all programs from the database.
-    return [];
+  try {
+    const results = await db.select()
+      .from(programsTable)
+      .execute();
+
+    return results;
+  } catch (error) {
+    console.error('Failed to fetch programs:', error);
+    throw error;
+  }
 }

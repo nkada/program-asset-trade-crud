@@ -1,8 +1,23 @@
 
+import { db } from '../db';
+import { programsTable } from '../db/schema';
+import { eq } from 'drizzle-orm';
 import { type IdInput, type Program } from '../schema';
 
-export async function getProgram(input: IdInput): Promise<Program | null> {
-    // This is a placeholder declaration! Real code should be implemented here.
-    // The goal of this handler is fetching a single program by ID from the database.
-    return null;
-}
+export const getProgram = async (input: IdInput): Promise<Program | null> => {
+  try {
+    const result = await db.select()
+      .from(programsTable)
+      .where(eq(programsTable.id, input.id))
+      .execute();
+
+    if (result.length === 0) {
+      return null;
+    }
+
+    return result[0];
+  } catch (error) {
+    console.error('Program fetch failed:', error);
+    throw error;
+  }
+};
